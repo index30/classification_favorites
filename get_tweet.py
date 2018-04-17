@@ -1,19 +1,24 @@
-from requests_oauthlib import OAuth1Session
 import json
+from requests_oauthlib import OAuth1Session
+import tweepy
 
 ### This file has consumer key etc.
 import secrets
 
-all_url = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-fav_url = "https://api.twitter.com/1.1/favorites/list.json"
-params = {}
+oauth = tweepy.OAuthHandler(secrets.CKey, secrets.CSecret)
+oauth.set_access_token(secrets.AToken, secrets.ASecret)
+twitter = tweepy.API(oauth)
 
-twitter = OAuth1Session(secrets.CKey, secrets.CSecret, secrets.AToken, secrets.ASecret)
-request = twitter.get(fav_url, params=params)
+### 20tweetだけ取得する
+### 時一定の時間内で使用回数が制限
+#home_tweets = twitter.home_timeline()
+### favのツイートを遡れる
+### パラメータのpageをいじれば5ヶ月分くらい??
+favorites = twitter.favorites(page=161)
 
-if request.status_code == 200:
-    timeline = json.loads(request.text)
-    for tweet in timeline:
-        print(tweet["text"])
-else:
-    print("Error:{}".format(request.status_code))
+#for tweet in home_tweets:
+#    print(tweet.text)
+
+for favorite in favorites:
+    print(favorite.created_at)
+    print("name:{0}\ncontent:{1}\n".format(favorite.user.name, favorite.text))
