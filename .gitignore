@@ -1,0 +1,8 @@
+#### Directory
+bin/
+include/
+lib/
+
+#### File
+*.json
+.Python
