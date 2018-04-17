@@ -6,3 +6,4 @@ lib/
 #### File
 *.json
 .Python
+secrets.py
