@@ -3,8 +3,10 @@ bin/
 include/
 lib/
 __pycache__/
+images/
 
 #### File
 *.json
 .Python
 secrets.py
+.DS_Store
