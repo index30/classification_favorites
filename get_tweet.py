@@ -8,15 +8,15 @@ import urllib.error
 ### This file has consumer key etc.
 import secrets
 
-SAVE_DIR = "images"
+SAVE_DIR = "images/favorite"
 
 
-def save_imgs(entities):
+def save_imgs(entities, save_dir):
     if 'media' in entities:
         for entity in entities['media']:
             img_url = entity['media_url']
             img_name = img_url.split("/")[-1]
-            save_Path = Path(SAVE_DIR, img_name)
+            save_Path = Path(save_dir, img_name)
             try:
                 response = urllib.request.urlopen(img_url).read()
                 with open(save_Path, "wb") as f:
@@ -35,15 +35,16 @@ def get_favorites(twitter, page_num):
     ### favのツイートを遡れる
     ### パラメータのpageをいじれば5ヶ月分くらい??
     favorites = twitter.favorites(page=page_num)
+    return favorites
 
-    #for tweet in home_tweets:
-    #    print(tweet.text)
 
+def save_favorites(twitter, page_num, save_dir=SAVE_DIR):
+    favorites = get_favorites(twitter, page_num)
     for favorite in favorites:
         try:
-            save_imgs(favorite.entities)
+            save_imgs(favorite.entities, save_dir)
             ext_entities = favorite.extended_entities
-            save_imgs(ext_entities)
+            save_imgs(ext_entities, save_dir)
         except TypeError as e:
             print("{}".format(e))
         except AttributeError as e:

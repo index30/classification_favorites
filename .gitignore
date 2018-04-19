@@ -4,9 +4,12 @@ include/
 lib/
 __pycache__/
 images/
+share/
+use_model/
 
 #### File
 *.json
 .Python
 secrets.py
 .DS_Store
+use_model/parameter.txt
