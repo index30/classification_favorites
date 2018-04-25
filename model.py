@@ -13,6 +13,7 @@ import tensorflow as tf
 
 from keras.models import Model
 from keras.models import Sequential
+from keras.models import load_model
 from keras.layers import Conv2D
 from keras.layers import MaxPooling2D
 from keras.layers import Dense, Dropout, Activation, Input, Flatten
@@ -25,6 +26,7 @@ from keras.utils import np_utils
 from cnn_arch import xception
 from cnn_arch import vgg
 from cnn_arch import lenet
+from cnn_arch import mobilenet
 import path
 
 # for filter
@@ -37,7 +39,7 @@ DATA_PATH = path.DATA_PATH
 
 
 def main(img_size, classes, batch_size, epoch):
-    model = lenet.build_model(img_size, classes)
+    model = mobilenet.build_model(img_size, classes)
     train_datagen = ImageDataGenerator(rescale=1.0 / 255,
                                        #rotation_range=90,
                                        width_shift_range=0.1,
@@ -107,8 +109,9 @@ def predict(img_path, model_name, img_size, classes):
     x = img_to_array(img)
     x = x.reshape((1,) + x.shape)
     x /= 255
-    model = lenet.build_model(img_size, classes)
+    model = xception.build_model(img_size, classes)
     model.load_weights(model_name)
+    #from keras.models import load_model
     #model = load_model(model_name)
     predict = model.predict(x)
     return predict
@@ -116,15 +119,16 @@ def predict(img_path, model_name, img_size, classes):
 
 if __name__=="__main__":
     ### when train
-    #main(256, 3, 10, 50)
+    #print(K.image_data_format())
+    main(224, 3, 10, 50)
 
     ### when predict
-    img_name = "images/data/validation/illust/illustFGOイラスト4.jpg"
+    #img_name = "images/data/validation/illust/illustFGOイラスト4.jpg"
     #img_name = "images/data/validation/scenery/scenery風景353.jpg"
     #img_name = "images/data/validation/animal/animal猫374.jpg"
-    model_name = "model.h5"
-    start_time = time.time()
-    predict = predict(img_name, model_name, 256, 3)
-    print(predict)
-    elapsed_time = time.time() - start_time
-    print("elapsed_time: {}".format(elapsed_time))
+    #model_name = "model.h5"
+    #start_time = time.time()
+    #predict = predict(img_name, model_name, 256, 3)
+    #print(predict)
+    #elapsed_time = time.time() - start_time
+    #print("elapsed_time: {}".format(elapsed_time))
